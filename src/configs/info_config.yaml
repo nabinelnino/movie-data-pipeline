@@ -1,0 +1,34 @@
+persistence_file_path: "./process_data"
+
+genre_data:
+  genre_json: "./input_data/genre.json"
+  genre_csv: "./process_data/genre.csv"
+  header:
+    - genre
+    - id
+    - name
+
+year_data:
+  year_json: "./input_data/year.json"
+  year_csv: "./process_data/year.csv"
+  header:
+    - year
+    - frequency
+    - id
+
+movie_csv: "./input_data/basic_movie_info.csv"
+
+combine_file:
+  merged_csv: "./process_data/merged.csv"
+  drop_columns: ["name_y"]
+  dtype_map:
+    year: int
+    frequency: int
+  rename_cols:
+    name_x: "movie_name"
+    id: "movie_id"
+  table_pk: id
+
+delete_consumed_files: False
+
+batch_size: 
