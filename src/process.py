@@ -121,7 +121,7 @@ class ProcessClass:
             except NameError:
                 pass
 
-    async def delete_folder(self, folder_path: str):
+    def delete_folder(self, folder_path: str):
         """
         Delete a folder and its contents.
 
@@ -134,8 +134,6 @@ class ProcessClass:
 
         """
         try:
-            folder_path = folder_path.lstrip("./")
-
             shutil.rmtree(folder_path)
             print(f"Folder '{folder_path}' successfully deleted.")
         except FileNotFoundError:
@@ -251,15 +249,17 @@ async def main():
     CONFIG_FILE_PATH = "./configs/info_config.yaml"
     config_dict = FileParser.read_yaml(CONFIG_FILE_PATH)
     process = ProcessClass(config_dict)
+
     try:
         await asyncio.gather(process.convert_genre_to_csv(), process.convert_year_to_csv())
         await process.combine_file()
-        db = DatabaseHandle(config_dict)
-        await db.run_loader(data_model)
+
+        # db = DatabaseHandle(config_dict)
+        # await db.run_loader(data_model)
         delete_consume = config_dict.get("delete_consumed_files", None)
         folder_path = config_dict.get("persistence_file_path", None)
         if delete_consume:
-            await process.delete_folder(folder_path)
+            process.delete_folder(folder_path)
     except Exception as e:
         print(f"An error occurred: {e}")
 
